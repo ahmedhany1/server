@@ -17,6 +17,7 @@ class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
     price = db.Column(db.Float, nullable=False)
+    category = db.Column(db.String(100), nullable=False)
     image = db.column(db.Text)
 
     def __repr__(self):
