@@ -29,6 +29,29 @@ source = requests.get("https://handmade-egypt.com/product-category/chairs/").tex
 
 soup = BeautifulSoup(source, "lxml")
 
+products = soup.find_all("div", class_="product")
+
+for product in products:
+    title = product.h3.text
+    
+    try:
+        price = float(product.find("span", class_="price").bdi.text[3:].replace(',', ''))
+    except:
+        price = 0
+    
+    image = product.find("a", class_="product-image-link").img["src"]
+
+    product_entry = Product(
+        title=title,
+        price=price,
+        image=image,
+        category="Chairs"
+    )
+    
+    db.session.add(product_entry)
+
+db.session.commit()
+
 @app.route("/")
 def index():
-    return "None"
+    return 'None'
