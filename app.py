@@ -17,7 +17,11 @@ class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
     price = db.Column(db.Float, nullable=False)
-    image = db.column(db.Text, nullable=False)
+    image = db.column(db.Text)
 
     def __repr__(self):
         return f"<Product {self.title}>"
+
+@app.route("/")
+def index():
+    return "None"
