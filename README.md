@@ -19,10 +19,11 @@ SQLAlchemy is used to connect the API with the database.
 
 ## Virtual Environment
 Steps to install a virtual environment
-1. Execute the command ([env_name] should be replaced with a name of your choice)
+1. Execute the command
     ```bash
     py -m venv [env_name]
     ```
+    ([env_name] should be replaced with a name of your choice)
     if it was installed successfully, a new directory with the [env_name] name should be created.
 1. Activate the environment using the command:
    ```bash
