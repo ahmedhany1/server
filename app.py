@@ -31,6 +31,10 @@ soup = BeautifulSoup(source, "lxml")
 
 products = soup.find_all("div", class_="product")
 
+# Recreate all the tables before populating them
+db.drop_all()
+db.create_all()
+
 for product in products:
     title = product.h3.text
     
@@ -54,4 +58,5 @@ db.session.commit()
 
 @app.route("/")
 def index():
-    return 'None'
+    products = Product.query.all()
+    return 'render_template("index.html", products=products)'
