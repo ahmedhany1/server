@@ -12,3 +12,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] =\
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+
+class Product(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)
+    price = db.Column(db.Float, nullable=False)
+    image = db.column(db.Text, nullable=False)
+
+    def __repr__(self):
+        return f"<Product {self.title}>"
