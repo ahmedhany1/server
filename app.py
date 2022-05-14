@@ -1,8 +1,10 @@
 import os
 from flask import Flask, render_template, redirect, request, url_for
 from flask_sqlalchemy import SQLAlchemy
-
 from sqlalchemy.sql import func
+
+from bs4 import BeautifulSoup
+import requests
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -22,6 +24,10 @@ class Product(db.Model):
 
     def __repr__(self):
         return f"<Product {self.title}>"
+
+source = requests.get("https://handmade-egypt.com/product-category/chairs/").text
+
+soup = BeautifulSoup(source, "lxml")
 
 @app.route("/")
 def index():
