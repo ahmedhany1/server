@@ -4,15 +4,19 @@ import os, requests, sqlite3
 conn = sqlite3.connect("database.db")
 c = conn.cursor()
 
-c.execute("""
-    CREATE TABLE products (
-        id INTEGER PRIMARY_KEY,
-        title TEXT,
-        price REAL,
-        category TEXT,
-        img_path TEXT
-    )
-    """)
+# Escape any exception that may arise due to the table being already created (In case of re-running the script)
+try:
+    c.execute("""
+        CREATE TABLE products (
+            id INTEGER PRIMARY_KEY,
+            title TEXT,
+            price REAL,
+            category TEXT,
+            img_path TEXT
+        )
+        """)
+except:
+    pass
 
 source = requests.get("https://handmade-egypt.com/store/").text
 
@@ -47,7 +51,7 @@ for category, category_url in categories_to_urls.items():
 
     # Escape FileExistsError (In case or re-running the script, this exception may arise)
     try:
-        os.mkdir(f"images/{category}")
+        os.mkdir(f"static/images/{category}")
     except FileExistsError:
         pass
 
@@ -58,7 +62,7 @@ for category, category_url in categories_to_urls.items():
         # Image file details
         img_url = product.find("a", class_="product-image-link").img["src"]
         img_title = title.replace(" ", "-")
-        img_path = f"images/{category}/{img_title}{img_url[-4:]}"
+        img_path = f"static/images/{category}/{img_title}{img_url[-4:]}"
         img_bytes = requests.get(img_url).content
         
         # Save new image file
@@ -76,9 +80,5 @@ for category, category_url in categories_to_urls.items():
         conn.commit()
 
         product_id += 1
-
-products = conn.execute("SELECT * FROM products").fetchall()
-for product in products:
-    print(product)
 
 conn.close()
