@@ -7,7 +7,7 @@ c = conn.cursor()
 # Escape any exception that may arise due to the table being already created (In case of re-running the script)
 try:
     c.execute("""
-        CREATE TABLE products (
+        CREATE TABLE Products (
             id INTEGER PRIMARY_KEY,
             title TEXT,
             price REAL,
