@@ -7,6 +7,6 @@ CORS(app)
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
-        return "POST"
-        
-    return "GET"
+        return render_template("index.html", request_method="POST")
+
+    return render_template("index.html", request_method="GET")
