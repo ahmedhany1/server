@@ -16,16 +16,16 @@ cursor.execute("""CREATE TABLE users (
 )""")
 connection.commit()
 
-cursor.execute("""
-        CREATE TABLE products (
-            id INTEGER PRIMARY_KEY,
-            title TEXT,
-            price REAL,
-            category TEXT,
-            img_path TEXT
-        )
-        """)
-connection.commit()
+conn = sqlite3.connect("database.db", check_same_thread=False)
+c = conn.cursor()
+
+def get_products():
+    c.execute("SELECT * FROM products")
+    return c.fetchall()
+
+def get_product(product_id):
+    c.execute("SELECT * FROM products WHERE id = ?", (product_id,))
+    return c.fetchone()
 
 @app.route("/")
 def index():
@@ -34,12 +34,14 @@ def index():
 @app.route("/products")
 def products():
     """Send products list to client"""
-    pass
+    products_ = get_products()
+    return products_
 
 @app.route("/product/<int:product_id>")
 def product(product_id):
     """Send a single product details to client"""
-    pass
+    product_ = get_product(product_id)
+    return product_
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -49,8 +51,8 @@ def register():
 
         # Extract the username, password and its confirmation
         username = request.form.get("username")
+        email = request.form.get("email")
         password = request.form.get("password")
-        confirmation = request.form.get("confirmation")
 
         # Ensure username was submitted
         if not username:
@@ -61,12 +63,8 @@ def register():
             flash("Username already taken. Please choose a different username.")
 
         # Ensure password was submitted
-        elif not password or not confirmation:
-            flash("Please enter a password and confirm it.")
-
-        # Ensure password and confirmation match
-        elif password != confirmation:
-            flash("Passwords do not match. Please re-enter the passwords and make sure they match")
+        elif not password:
+            flash("Please enter a password.")
 
         else:
             # Insert the new user into the database
